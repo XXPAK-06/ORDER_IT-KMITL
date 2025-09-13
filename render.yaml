@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: order-it-kmitl
+    env: node
+    buildCommand: npm install
+    startCommand: node backend.js
+    staticPublishPath: ./

@@ -1,11 +1,15 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
+const path = require('path');
 const app = express();
 const db = new sqlite3.Database('./food_ordering.db');
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname)));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // สร้างตารางฐานข้อมูล
 db.serialize(() => {
@@ -265,9 +269,9 @@ app.put('/user/:student_id', (req, res) => {
   );
 });
 
-// ระบุ default route ให้ไปที่ order.html
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/order.html');
+// แก้ไข default route
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'order.html'));
 });
 
 // เพิ่ม error handling
