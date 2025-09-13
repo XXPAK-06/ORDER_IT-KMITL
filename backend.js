@@ -5,6 +5,7 @@ const app = express();
 const db = new sqlite3.Database('./food_ordering.db');
 
 app.use(bodyParser.json());
+app.use(express.static(__dirname));
 
 // สร้างตารางฐานข้อมูล
 db.serialize(() => {
@@ -262,6 +263,16 @@ app.put('/user/:student_id', (req, res) => {
       res.json({ success: true });
     }
   );
+});
+
+// ระบุ default route ให้ไปที่ order.html
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/order.html');
+});
+
+// เพิ่ม error handling
+app.use((req, res) => {
+  res.status(404).sendFile(__dirname + '/order.html');
 });
 
 app.listen(3000, () => {
