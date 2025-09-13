@@ -1,0 +1,30 @@
+# ขั้นตอนการตั้งค่า Git และ Push โค้ด
+
+1. ตั้งค่า Git Credentials:
+git config --global user.name "YOUR_GITHUB_USERNAME"
+git config --global user.email "YOUR_GITHUB_EMAIL"
+
+2. สร้าง Personal Access Token:
+- ไปที่ GitHub.com -> Settings -> Developer settings -> Personal access tokens
+- เลือก "Tokens (classic)"
+- Generate new token (classic)
+- ตั้งชื่อ token และเลือกสิทธิ์ 'repo'
+- คัดลอก token เก็บไว้
+
+3. ตั้งค่า Remote Repository ใหม่:
+git remote remove origin
+git remote add origin https://YOUR_USERNAME:YOUR_TOKEN@github.com/XXPAK-06/ORDER_IT-KMITL.git
+
+4. Push Code:
+git branch -M main
+git push -u origin main
+
+# หากใช้ GitHub CLI แทน:
+1. ติดตั้ง GitHub CLI:
+winget install GitHub.cli
+
+2. Login:
+gh auth login
+
+3. Push:
+git push -u origin main

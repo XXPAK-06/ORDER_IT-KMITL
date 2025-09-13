@@ -1,0 +1,11 @@
+# ลบ remote origin เดิม
+git remote remove origin
+
+# เพิ่ม remote origin ใหม่ (แทนที่ YOUR_TOKEN ด้วย Personal Access Token ของคุณ)
+git remote add origin https://YOUR_TOKEN@github.com/XXPAK-06/ORDER_IT-KMITL.git
+
+# ตรวจสอบ remote
+git remote -v
+
+# ถ้าต้องการ push
+git push -u origin main
