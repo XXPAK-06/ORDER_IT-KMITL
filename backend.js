@@ -5,9 +5,8 @@ const path = require('path');
 const app = express();
 const db = new sqlite3.Database('./food_ordering.db');
 
-app.use(bodyParser.json());
-app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname)));
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -269,7 +268,7 @@ app.put('/user/:student_id', (req, res) => {
   );
 });
 
-// แก้ไข default route
+// ย้าย route handler นี้ไปท้ายสุดของไฟล์
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'order.html'));
 });
@@ -282,3 +281,5 @@ app.use((req, res) => {
 app.listen(3000, () => {
   console.log('Food Ordering Backend running on http://localhost:3000');
 });
+
+

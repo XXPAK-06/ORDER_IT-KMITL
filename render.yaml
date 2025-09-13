@@ -4,4 +4,8 @@ services:
     env: node
     buildCommand: npm install
     startCommand: node backend.js
-    staticPublishPath: ./
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /order.html

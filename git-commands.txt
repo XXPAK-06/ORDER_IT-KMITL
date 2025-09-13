@@ -9,3 +9,14 @@ git remote -v
 
 # ถ้าต้องการ push
 git push -u origin main
+
+# รันคำสั่งตามลำดับ
+
+# 1. เพิ่มไฟล์ทั้งหมด
+git add .
+
+# 2. Commit การเปลี่ยนแปลง
+git commit -m "Update: Add render.yaml and update project structure"
+
+# 3. Push ขึ้น GitHub
+git push origin main

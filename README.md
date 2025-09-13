@@ -1,36 +1,36 @@
 # ระบบสั่งอาหารโรงอาหารคณะไอที KMITL
 
-ระบบสำหรับสั่งอาหารออนไลน์ภายในโรงอาหารคณะเทคโนโลยีสารสนเทศ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง
+ระบบจัดการการสั่งอาหารออนไลน์สำหรับโรงอาหารคณะเทคโนโลยีสารสนเทศ สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง
 
-## ฟีเจอร์หลัก
-- สั่งอาหารจากร้านค้าต่างๆ
-- ระบบคิวอัตโนมัติ
-- ดาวน์โหลดและพิมพ์บัตรคิว
-- ติดตามสถานะออเดอร์
-- ประวัติการสั่งอาหาร
+## การติดตั้ง
 
-## วิธีการติดตั้ง
-1. Clone repository นี้:
+1. Clone repository:
 ```bash
 git clone https://github.com/XXPAK-06/ORDER_IT-KMITL.git
 ```
-2. เปิดไฟล์ order.html ในเว็บบราวเซอร์
 
-## การใช้งาน
-โปรดอ่านคู่มือการใช้งานเพิ่มเติมได้ที่ [usage_guide.txt](usage_guide.txt)
+2. ติดตั้ง dependencies:
+```bash
+npm install
+```
 
-## ทีมพัฒนา
+3. รันระบบ:
+```bash
+npm start
+```
+
+## เทคโนโลยีที่ใช้
+- Node.js
+- Express
+- SQLite3
+- HTML/CSS/JavaScript
+
+## Deploy
+ระบบถูก deploy ที่ Render.com: [order-it-kmitl.onrender.com](https://order-it-kmitl.onrender.com)
+
+## ผู้พัฒนา
 - คณะเทคโนโลยีสารสนเทศ
 - สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง
-
-# Simple Slot Backend
-
-## วิธีใช้งาน
-
-1. ติดตั้ง dependencies:
-   ```
-   npm install express sqlite3 body-parser
-   ```
 2. รัน backend:
    ```
    node backend.js
