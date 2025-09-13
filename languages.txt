@@ -1,0 +1,18 @@
+โปรเจคนี้ใช้ภาษาต่างๆ ดังนี้:
+
+1. HTML & JavaScript
+   - order.html: หน้าเว็บหลักของระบบ
+   - ใช้ JavaScript ในการจัดการข้อมูลและ DOM
+   - รวม CSS สำหรับการจัดรูปแบบ
+
+เมื่อ GitHub ถามว่า "Select the main language of this repository":
+- เลือก "Node" เนื่องจาก:
+  * โปรเจคใช้ JavaScript เป็นหลักในการทำงาน
+  * Node เป็นตัวเลือกที่เหมาะสมที่สุดจากตัวเลือกที่มี:
+    - Docker
+    - Elixir
+    - Go
+    - Node (เลือกอันนี้)
+    - Python3
+    - Ruby
+    - Rust

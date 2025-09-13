@@ -1,0 +1,16 @@
+การตั้งค่า Environment Variables:
+
+ไม่จำเป็นต้องตั้งค่าเนื่องจาก:
+1. เป็น Static Web ไม่มีการเชื่อมต่อกับ API ภายนอก
+2. ไม่มีการใช้ค่า configuration ที่ต้องซ่อน
+3. ข้อมูลทั้งหมดอยู่ใน JavaScript แบบ hardcode
+
+หากในอนาคตต้องการเพิ่ม Environment Variables:
+1. NAME_OF_VARIABLE: ให้เว้นว่างไว้
+2. value: ให้เว้นว่างไว้
+3. กด Skip หรือ Generate โดยไม่ต้องใส่ค่า
+
+หมายเหตุ:
+- Environment Variables มักใช้กับ backend หรือ API keys
+- สำหรับ static web ที่ไม่มีการเชื่อมต่อ API ไม่จำเป็นต้องตั้งค่า
+- หากมีการเพิ่ม backend ในอนาคตค่อยมาตั้งค่าใหม่

@@ -1,0 +1,19 @@
+Start Command ที่จำเป็นต้องระบุ:
+
+Command ที่ต้องใส่:
+npx http-server
+
+เหตุผล:
+1. เป็น command ที่ใช้รัน static web server
+2. ใช้ http-server เพื่อเปิดให้เข้าถึงไฟล์ HTML ได้
+3. npx ใช้เพื่อรัน package โดยไม่ต้องติดตั้งแบบ global
+
+วิธีการตั้งค่า:
+1. ในช่อง Start Command ให้ใส่: npx http-server
+2. ไม่ต้องใส่ $ นำหน้า
+3. เมื่อ deploy จะรัน server อัตโนมัติ
+
+หมายเหตุ:
+- command นี้จะสร้าง web server สำหรับ serve static files
+- สามารถเข้าถึงเว็บผ่าน URL ที่ render จัดเตรียมให้
+- port จะถูกกำหนดโดย render โดยอัตโนมัติ

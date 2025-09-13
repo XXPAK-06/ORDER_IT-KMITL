@@ -1,0 +1,13 @@
+ขั้นตอนการตั้งค่าใน GitHub:
+
+1. Project (Optional):
+   - ตอบ "Skip" หรือเว้นว่างไว้
+   - สามารถเพิ่ม project ภายหลังได้หลังจากสร้าง repository เสร็จ
+   - ข้อความแจ้ง: "Add this web service to a project once it's created."
+
+2. การเลือก Environment:
+   - เลือก "Production" เนื่องจากเป็น production environment
+
+หมายเหตุ:
+- Project เป็นฟีเจอร์เสริมสำหรับจัดการโปรเจค
+- สามารถตั้งค่าได้ภายหลังที่ repository settings

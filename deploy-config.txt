@@ -1,0 +1,20 @@
+การตั้งค่า Deployment Config:
+
+1. Root Directory:
+   - ปล่อยว่างไว้ (Skip)
+   - เนื่องจากโปรเจคเราไม่ได้เป็น monorepo และ code อยู่ที่ root directory
+
+2. Build Command:
+   - ไม่ต้องใส่ (Skip)
+   - เนื่องจากเป็น static HTML ไม่ต้อง build
+   - ลบ "yarn" ออก เพราะไม่ได้ใช้
+
+3. Start Command:
+   - ไม่ต้องใส่ (Skip)
+   - เนื่องจากเป็น static HTML สามารถรันได้เลย
+   - ลบ "yarn start" ออก
+
+หมายเหตุ:
+- โปรเจคนี้เป็น Static Web ไม่ต้องการ build และ start command
+- สามารถรัน HTML ได้โดยตรงไม่ต้องผ่าน package manager
+- ถ้ามีการเพิ่ม backend ในอนาคตค่อยมาตั้งค่าใหม่
