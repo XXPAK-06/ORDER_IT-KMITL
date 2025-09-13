@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สั่งอาหารโรงอาหารคณะไอที</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b00 0%, #ff8800 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Snowflake styling */
+        .snowflake {
+            color: #fff;
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px #000;
+        }
+        .snowflake,.snowflake .inner{animation-iteration-count:infinite;animation-play-state:running}@keyframes snowflakes-fall{0%{transform:translateY(0)}100%{transform:translateY(110vh)}}@keyframes snowflakes-shake{0%,100%{transform:translateX(0)}50%{transform:translateX(80px)}}.snowflake{position:fixed;top:-10%;z-index:9999;-webkit-user-select:none;user-select:none;cursor:default;pointer-events:none;animation-name:snowflakes-shake;animation-duration:3s;animation-timing-function:ease-in-out}.snowflake .inner{animation-duration:10s;animation-name:snowflakes-fall;animation-timing-function:linear}.snowflake:nth-of-type(0){left:1%;animation-delay:0s}.snowflake:nth-of-type(0) .inner{animation-delay:0s}.snowflake:first-of-type{left:10%;animation-delay:1s}.snowflake:first-of-type .inner,.snowflake:nth-of-type(8) .inner{animation-delay:1s}.snowflake:nth-of-type(2){left:20%;animation-delay:.5s}.snowflake:nth-of-type(2) .inner,.snowflake:nth-of-type(6) .inner{animation-delay:6s}.snowflake:nth-of-type(3){left:30%;animation-delay:2s}.snowflake:nth-of-type(11) .inner,.snowflake:nth-of-type(3) .inner{animation-delay:4s}.snowflake:nth-of-type(4){left:40%;animation-delay:2s}.snowflake:nth-of-type(10) .inner,.snowflake:nth-of-type(4) .inner{animation-delay:2s}.snowflake:nth-of-type(5){left:50%;animation-delay:3s}.snowflake:nth-of-type(5) .inner{animation-delay:8s}.snowflake:nth-of-type(6){left:60%;animation-delay:2s}.snowflake:nth-of-type(7){left:70%;animation-delay:1s}.snowflake:nth-of-type(7) .inner{animation-delay:2.5s}.snowflake:nth-of-type(8){left:80%;animation-delay:0s}.snowflake:nth-of-type(9){left:90%;animation-delay:1.5s}.snowflake:nth-of-type(9) .inner{animation-delay:3s}.snowflake:nth-of-type(10){left:25%;animation-delay:0s}.snowflake:nth-of-type(11){left:65%;animation-delay:2.5s}
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .booking-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-col {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ff6b00;
+            box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b00, #ff8800);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 0, 0.3);
+        }
+
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .table-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .table-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .table-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .table-capacity {
+            background: #ff6b00;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .time-slot {
+            padding: 8px 12px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .time-slot.available {
+            background: #e8f5e8;
+            color: #2d5a2d;
+            border: 2px solid #4caf50;
+        }
+
+        .time-slot.available:hover {
+            background: #4caf50;
+            color: white;
+        }
+
+        .time-slot.booked {
+            background: #ffeaea;
+            color: #d32f2f;
+            border: 2px solid #f44336;
+            cursor: not-allowed;
+        }
+
+        .time-slot.selected {
+            background: #ff6b00;
+            color: white;
+            border: 2px solid #5a67d8;
+        }
+
+        .booking-summary {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .booking-summary.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #ff6b00;
+        }
+
+        /* เพิ่ม CSS สำหรับ Login */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .user-bookings {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .booking-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .booking-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-checked-in {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-completed {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .table-status-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            background: #4CAF50;
+            color: white;
+        }
+
+        .table-occupancy {
+            margin-top: 10px;
+            padding: 8px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            font-size: 0.9em;
+        }
+
+        .user-count {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #ff6b00;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .form-col {
+                min-width: 100%;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .register-link {
+            color: #ff6b00;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            display: block;
+            text-align: center;
+        }
+
+        .register-link:hover {
+            color: #ff8800;
+        }
+
+        .kmitl-logo {
+            max-width: 150px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .user-profile {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .profile-button {
+            background: #ff6b00;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-modal {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-top: 10px;
+            display: none;
+        }
+
+        .profile-modal.show {
+            display: block;
+        }
+
+        .profile-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .profile-field {
+            display: grid;
+            gap: 5px;
+        }
+
+        .edit-button {
+            background: #ff8800;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .nav-links {
+            margin-top: 20px;
+        }
+        
+        .history-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+        }
+
+        .history-link:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .table-status.available {
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .logo-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .logo-container img {
+            width: 100px;
+            height: auto;
+            opacity: 0.8;
+        }
+
+        .header-logos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-logos img {
+            height: 60px;
+            width: auto;
+        }
+
+        .booking-card {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .booking-history {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+        }
+
+        .order-list {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-item button {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .order-summary {
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 2px solid #ddd;
+            font-weight: bold;
+        }
+
+        .menu-item-count {
+            background: #ff6b00;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-size: 0.8em;
+            margin-left: 5px;
+        }
+
+        .btn-order {
+            background: #ff6b00;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .table-name, .table-type {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .queue-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+
+        .restaurant-name {
+            color: #ff6b00;
+            font-size: 1.5em;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .queue-menu-item {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 1.1em;
+        }
+
+        .queue-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .queue-actions .btn {
+            padding: 10px 20px;
+            font-size: 0.9em;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .queue-popup, .queue-popup * {
+                visibility: visible;
+            }
+            .queue-popup {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .queue-actions {
+                display: none;
+            }
+        }
+    </style>
+    <script src="userStorage.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</head>
+<body>
+    <!-- Snowflakes -->
+    <div class="snowflakes" aria-hidden="true">
+        <div class="snowflake"><div class="inner">❅</div></div>
+        <div class="snowflake"><div class="inner">❅</div></div>
+        <div class="snowflake"><div class="inner">❅</div></div>
+        <div class="snowflake"><div class="inner">❅</div></div>
+        <div class="snowflake"><div class="inner">❅</div></div>
+        <div class="snowflake"><div class="inner">❅</div></div>
+        <div class="snowflake"><div class="inner">❅</div></div>
+        <div class="snowflake"><div class="inner">❅</div></div>
+        <div class="snowflake"><div class="inner">❅</div></div>
+        <div class="snowflake"><div class="inner">❅</div></div>
+        <div class="snowflake"><div class="inner">❅</div></div>
+        <div class="snowflake"><div class="inner">❅</div></div>
+    </div>
+
+    <div class="container">
+        <!-- เหลือแค่ส่วนการสั่งอาหาร -->
+        <div id="bookingSection">
+            <div class="header">
+                <div class="header-logos">
+                    <img src="images/it-logo.png" alt="IT Logo">
+                    <img src="https://www.kmitl.ac.th/sites/default/files/2023-02/KMITL_Logo.png" alt="KMITL Logo" class="kmitl-logo">
+                    <img src="images/canteen-logo.png" alt="Canteen Logo">
+                </div>
+                <h1>🍽️ สั่งอาหารโรงอาหารคณะเทคโนโลยีสารสนเทศ</h1>
+                <p>สถาบันเทคโนโลยีพระจอมเกล้าเจ้าคุณทหารลาดกระบัง</p>
+            </div>
+
+            <div class="booking-section">
+                <h2>ข้อมูลการสั่งอาหาร</h2>
+                <form id="bookingForm">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="customerName">ชื่อ-นามสกุล</label>
+                                <input type="text" id="customerName" name="customerName" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="phoneNumber">เบอร์โทรศัพท์</label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bookingDate">วันที่สั่ง</label>
+                        <input type="date" id="bookingDate" name="bookingDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specialRequest">หมายเหตุพิเศษ (ถ้ามี)</label>
+                        <textarea id="specialRequest" name="specialRequest" rows="3" placeholder="เช่น ไม่ใส่ผัก ไม่เผ็ด"></textarea>
+                    </div>
+                </form>
+
+                <!-- เพิ่มส่วนแสดงรายการอาหารที่สั่ง -->
+                <div id="currentOrderList" class="order-list" style="display: none;">
+                    <h3>รายการอาหารที่สั่ง</h3>
+                    <div id="orderItems"></div>
+                    <div class="order-summary">
+                        <div class="total-items">จำนวนรายการ: <span id="totalItems">0</span></div>
+                        <div class="total-price">ราคารวม: <span id="totalPrice">0</span> บาท</div>
+                    </div>
+                    <button class="btn" onclick="confirmOrder()">ยืนยันการสั่งอาหาร</button>
+                </div>
+            </div>
+
+            <div class="booking-section">
+                <h2>เลือกอาหารและหมายเลขคิว</h2>
+                <div class="tables-grid" id="tablesGrid"></div>
+            </div>
+
+            <div class="booking-summary" id="bookingSummary">
+                <div class="summary-title">สรุปการสั่งอาหาร</div>
+                <div id="summaryContent"></div>
+                <button class="btn" onclick="confirmBooking()" style="width: 100%; margin-top: 20px;">
+                    ยืนยันการสั่งอาหาร
+                </button>
+            </div>
+        </div>
+
+        <!-- เหลือแค่ส่วนประวัติการสั่ง -->
+        <div class="booking-history" id="bookingHistory">
+            <h2>ประวัติการสั่งอาหาร</h2>
+            <div id="historyList"></div>
+        </div>
+
+        <div class="user-profile" id="userProfile" style="display: none;">
+            <div class="profile-button" onclick="toggleProfile()">
+                <span>👤</span>
+                <span id="profileName"></span>
+            </div>
+            <div class="profile-modal" id="profileModal">
+                <h3>ข้อมูลส่วนตัว</h3>
+                <div class="profile-form">
+                    <div class="profile-field">
+                        <label>รหัสนักศึกษา:</label>
+                        <input type="text" id="profileStudentId" disabled>
+                    </div>
+                    <div class="profile-field">
+                        <label>ชื่อ-นามสกุล:</label>
+                        <input type="text" id="profileFullName">
+                    </div>
+                    <div class="profile-field">
+                        <label>Email:</label>
+                        <input type="email" id="profileEmail">
+                    </div>
+                    <div class="profile-field">
+                        <label>เบอร์โทรศัพท์:</label>
+                        <input type="tel" id="profilePhone">
+                    </div>
+                    <div class="profile-field">
+                        <label>คณะ:</label>
+                        <input type="text" id="profileFaculty" value="คณะเทคโนโลยีสารสนเทศ" disabled>
+                    </div>
+                    <button class="edit-button" onclick="saveProfile()">บันทึกข้อมูล</button>
+                    <button class="btn" onclick="logout()" style="width: 100%; margin-top: 10px;">ออกจากระบบ</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="logo-container">
+            <img src="images/corner-logo.png" alt="Corner Logo">
+        </div>
+    </div>
+
+    <script>
+// Single declaration of shared variables
+const restaurants = [
+    {
+        id: 1,
+        name: "ร้านโคเจ",
+        type: "อาหารเกาหลี",
+        menu: [
+            { name: "บิบิมบับ", price: 89 },
+            { name: "คิมบับ", price: 79 },
+            { name: "ต็อกบกกี", price: 69 }
+        ]
+    },
+    {
+        id: 2,
+        name: "ครัวไทยอีสาน",
+        type: "อาหารไทย-อีสาน",
+        menu: [
+            { name: "ส้มตำไทย", price: 60 },
+            { name: "ลาบหมู", price: 70 },
+            { name: "ต้มแซ่บกระดูกอ่อน", price: 80 }
+        ]
+    },
+    {
+        id: 3,
+        name: "Pasta House",
+        type: "อาหารอิตาเลียน",
+        menu: [
+            { name: "สปาเกตตี้คาโบนาร่า", price: 129 },
+            { name: "พิซซ่าหน้าซีฟู้ด", price: 199 },
+            { name: "ลาซานญ่า", price: 159 }
+        ]
+    },
+    {
+        id: 4,
+        name: "Sushi Bar",
+        type: "อาหารญี่ปุ่น",
+        menu: [
+            { name: "ข้าวหน้าปลาดิบ", price: 159 },
+            { name: "ราเมนหมูชาชู", price: 129 },
+            { name: "ชุดซูชิ 12 ชิ้น", price: 259 }
+        ]
+    },
+    {
+        id: 5,
+        name: "จานเด็ด",
+        type: "อาหารตามสั่ง",
+        menu: [
+            { name: "ข้าวกะเพราหมูสับไข่ดาว", price: 55 },
+            { name: "ผัดซีอิ๊วหมู", price: 50 },
+            { name: "ข้าวผัดต้มยำทะเล", price: 70 }
+        ]
+    },
+    {
+        id: 6,
+        name: "Sichuan Kitchen",
+        type: "อาหารจีน",
+        menu: [
+            { name: "หมาล่าชาบู", price: 199 },
+            { name: "ข้าวหน้าเป็ดย่าง", price: 89 },
+            { name: "ผัดหม่าม่าทะเล", price: 120 }
+        ]
+    },
+    {
+        id: 7,
+        name: "Halal Food",
+        type: "อาหารมุสลิม",
+        menu: [
+            { name: "ข้าวหมกไก่", price: 69 },
+            { name: "ข้าวมันส้มตำ", price: 65 },
+            { name: "ซุปเนื้อ", price: 89 }
+        ]
+    },
+    {
+        id: 8,
+        name: "Veggie Fresh",
+        type: "อาหารมังสวิรัติ",
+        menu: [
+            { name: "ผัดผักรวมมิตร", price: 60 },
+            { name: "เห็ดทอดกระเทียม", price: 65 },
+            { name: "แกงจืดเต้าหู้", price: 55 }
+        ]
+    },
+    {
+        id: 9,
+        name: "Mekong River",
+        type: "อาหารเวียดนาม",
+        menu: [
+            { name: "เฝอเนื้อตุ๋น", price: 89 },
+            { name: "ปอเปี๊ยะสด", price: 69 },
+            { name: "บั่นหมี่", price: 79 }
+        ]
+    },
+    {
+        id: 10,
+        name: "Indian Curry",
+        type: "อาหารอินเดีย",
+        menu: [
+            { name: "ข้าวหมกไก่มาซาล่า", price: 99 },
+            { name: "แกงกะหรี่ไก่", price: 89 },
+            { name: "นานไก่ตุ๋น", price: 49 }
+        ]
+    }
+];
+const queueNumbers = Array.from({length: 100}, (_, i) => i + 1);
+
+// Global state variables
+let currentUser = null;
+let users = [];
+let bookings = [];
+let selectedBooking = { table: null, time: null };
+let currentOrder = {
+    items: [],
+    restaurantId: null,
+    queueNumber: null
+};
+
+// Initialize from localStorage
+try {
+    currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+    users = JSON.parse(localStorage.getItem('users')) || [];
+    bookings = JSON.parse(localStorage.getItem('bookings')) || [{
+        id: 1,
+        userId: "12345678",
+        tableId: 1,
+        date: new Date().toISOString().split('T')[0],
+        time: "12:00",
+        customerName: "นักศึกษา ตัวอย่าง", 
+        phoneNumber: "0812345678",
+        specialRequest: ""
+    }];
+    localStorage.setItem('bookings', JSON.stringify(bookings));
+} catch (e) {
+    console.error('Error loading data from localStorage:', e);
+}
+
+// Functions
+function getStatusText(status) {
+    switch(status) {
+        case 'pending': return 'รอดำเนินการ';
+        case 'cooking': return 'กำลังทำอาหาร';
+        case 'ready': return 'อาหารพร้อมเสิร์ฟ';
+        case 'completed': return 'รับอาหารแล้ว';
+        default: return status;
+    }
+}
+
+// Fix confirmOrder function
+function confirmOrder() {
+    // ตรวจสอบการกรอกข้อมูล
+    const customerName = document.getElementById('customerName').value.trim();
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+    const bookingDate = document.getElementById('bookingDate').value;
+
+    if (!customerName || !phoneNumber || !bookingDate) {
+        Swal.fire({
+            title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+            text: 'โปรดกรอกชื่อ-นามสกุล เบอร์โทรศัพท์ และวันที่สั่งอาหาร',
+            icon: 'warning',
+            confirmButtonColor: '#ff6b00'
+        });
+        return;
+    }
+
+    // ตรวจสอบรูปแบบเบอร์โทรศัพท์
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+        Swal.fire({
+            title: 'เบอร์โทรศัพท์ไม่ถูกต้อง',
+            text: 'กรุณากรอกเบอร์โทรศัพท์ 10 หลัก',
+            icon: 'warning',
+            confirmButtonColor: '#ff6b00'
+        });
+        return;
+    }
+
+    // ตรวจสอบรายการอาหาร
+    if (currentOrder.items.length === 0) {
+        Swal.fire({
+            title: 'ไม่พบรายการอาหาร',
+            text: 'กรุณาเลือกรายการอาหารก่อนสั่ง',
+            icon: 'warning',
+            confirmButtonColor: '#ff6b00'
+        });
+        return;
+    }
+
+    // ถ้าผ่านการตรวจสอบทั้งหมด ดำเนินการสั่งอาหาร
+    const queueNumber = generateUniqueQueueNumber();
+    
+    const order = {
+        id: Date.now(),
+        restaurantId: currentOrder.restaurantId,
+        items: currentOrder.items,
+        note: document.getElementById('specialRequest').value,
+        queueNumber: queueNumber,
+        status: 'pending',
+        orderDate: new Date().toISOString(),
+        customerName: customerName,
+        phoneNumber: phoneNumber,
+        bookingDate: bookingDate
+    };
+
+    saveOrder(order);
+    showQueueCard(order);
+    
+    // แสดงการแจ้งเตือนให้ดาวน์โหลดบัตรคิว
+    setTimeout(() => {
+        Swal.fire({
+            title: 'ยืนยันการสั่งอาหารสำเร็จ!',
+            text: 'กรุณาดาวน์โหลดบัตรคิวเพื่อใช้รับอาหาร',
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#ff6b00',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ดาวน์โหลดบัตรคิว',
+            cancelButtonText: 'ปิด'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                downloadQueueCard(order.queueNumber);
+            }
+        });
+    }, 500);
+    
+    // Reset form
+    Object.assign(currentOrder, {
+        items: [],
+        restaurantId: null,
+        queueNumber: null
+    });
+    
+    updateOrderList();
+    document.getElementById('customerName').value = '';
+    document.getElementById('phoneNumber').value = '';
+    document.getElementById('specialRequest').value = '';
+}
+
+function renderTables() {
+    const tablesGrid = document.getElementById('tablesGrid');
+    if (!tablesGrid) return;
+    
+    tablesGrid.innerHTML = '';
+    
+    restaurants.forEach(restaurant => {
+        const tableCard = document.createElement('div');
+        tableCard.className = 'table-card';
+        
+        tableCard.innerHTML = `
+            <div class="table-header">
+                <div class="table-name">${restaurant.name}</div>
+                <div class="table-type">${restaurant.type}</div>
+            </div>
+            <div class="menu-items">
+                ${restaurant.menu.map(item => `
+                    <div class="menu-item">
+                        <span class="menu-item-name">${item.name}</span>
+                        <span class="menu-item-price">${item.price} บาท</span>
+                        <button onclick="addToOrder(${restaurant.id}, '${item.name}', ${item.price})" 
+                                class="btn-order">
+                            สั่งอาหาร
+                        </button>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        
+        tablesGrid.appendChild(tableCard);
+    });
+}
+
+// เพิ่ม event listener สำหรับการโหลดหน้า
+document.addEventListener('DOMContentLoaded', function() {
+    renderTables();
+});
+
+// เพิ่ม CSS เพื่อปรับแต่งการแสดงผล
+const additionalStyle = document.createElement('style');
+additionalStyle.textContent = `
+    .menu-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .menu-item-name {
+        flex: 1;
+        font-size: 1.1em;
+        font-weight: 500;
+    }
+
+    .menu-item-price {
+        margin: 0 15px;
+        font-weight: bold;
+        color: #ff6b00;
+    }
+
+    .btn-order {
+        background: #ff6b00;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-order:hover {
+        background: #ff8800;
+        transform: translateY(-2px);
+    }
+`;
+document.head.appendChild(additionalStyle);
+
+// เพิ่มฟังก์ชันสำหรับเพิ่มรายการอาหาร
+function addToOrder(restaurantId, itemName, price) {
+    // แสดงรายการที่สั่ง
+    document.getElementById('currentOrderList').style.display = 'block';
+    
+    // เพิ่มรายการในตะกร้า
+    currentOrder.items.push({
+        name: itemName,
+        price: price,
+        quantity: 1
+    });
+    currentOrder.restaurantId = restaurantId;
+    
+    updateOrderList();
+}
+
+// อัพเดทรายการอาหารที่สั่ง
+function updateOrderList() {
+    const orderItems = document.getElementById('orderItems');
+    const totalItems = document.getElementById('totalItems');
+    const totalPrice = document.getElementById('totalPrice');
+    
+    let html = '';
+    let total = 0;
+    
+    currentOrder.items.forEach((item, index) => {
+        html += `
+            <div class="order-item">
+                <span>${item.name}</span>
+                <span>${item.price} บาท</span>
+                <button onclick="removeItem(${index})">ลบ</button>
+            </div>
+        `;
+        total += item.price * item.quantity;
+    });
+    
+    orderItems.innerHTML = html;
+    totalItems.textContent = currentOrder.items.length;
+    totalPrice.textContent = total;
+}
+
+// ลบรายการอาหาร
+function removeItem(index) {
+    currentOrder.items.splice(index, 1);
+    if (currentOrder.items.length === 0) {
+        document.getElementById('currentOrderList').style.display = 'none';
+    }
+    updateOrderList();
+}
+
+// แสดงบัตรคิว
+function showQueueCard(order) {
+    const restaurant = restaurants.find(r => r.id === order.restaurantId);
+    const popup = document.createElement('div');
+    popup.className = 'queue-popup';
+    popup.innerHTML = `
+        <div class="queue-card" id="queueCard">
+            <button class="close-popup" onclick="this.parentElement.parentElement.remove()">×</button>
+            <div class="queue-header">
+                <h2>บัตรคิวของคุณ</h2>
+                <h3 class="restaurant-name">${restaurant.name}</h3>
+                <div class="queue-number">คิวที่: ${order.queueNumber}</div>
+            </div>
+            <div class="queue-detail">
+                <p>ชื่อ: ${order.customerName}</p>
+                <p>เบอร์โทร: ${order.phoneNumber}</p>
+                <p>รายการอาหาร:</p>
+                ${order.items.map(item => `
+                    <div class="queue-menu-item">${item.name} - ${item.price} บาท</div>
+                `).join('')}
+                <p>หมายเหตุ: ${order.note || '-'}</p>
+                <p>สถานะ: ${getStatusText(order.status)}</p>
+            </div>
+            <div class="queue-actions">
+                <button class="btn" onclick="window.print()">พิมพ์บัตรคิว</button>
+                <button class="btn" onclick="downloadQueueCard(${order.queueNumber})">ดาวน์โหลดบัตรคิว</button>
+                <button class="btn" onclick="this.parentElement.parentElement.parentElement.remove()">ปิด</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(popup);
+    
+    // เพิ่มรายการในประวัติ
+    updateHistory(order);
+}
+
+// เพิ่มฟังก์ชันสำหรับดาวน์โหลดบัตรคิว
+function downloadQueueCard(queueNumber) {
+    const queueCard = document.getElementById('queueCard');
+    
+    // สร้าง canvas จาก div
+    html2canvas(queueCard).then(canvas => {
+        // แปลง canvas เป็น blob
+        canvas.toBlob(function(blob) {
+            // สร้าง URL สำหรับดาวน์โหลด
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = `queue-ticket-${queueNumber}.png`;
+            link.href = url;
+            link.click();
+            
+            // ลบ URL หลังจากดาวน์โหลด
+            URL.revokeObjectURL(url);
+        });
+    });
+}
+
+// อัพเดทประวัติการสั่งอาหาร
+function updateHistory(order) {
+    const historyList = document.getElementById('historyList');
+    const historyItem = document.createElement('div');
+    historyItem.className = 'booking-card';
+    
+    historyItem.innerHTML = `
+        <div class="booking-status ${order.status}">${getStatusText(order.status)}</div>
+        <h3>คิวที่: ${order.queueNumber}</h3>
+        <p>วันที่: ${new Date(order.orderDate).toLocaleString()}</p>
+        <p>รายการอาหาร:</p>
+        ${order.items.map(item => `
+            <div class="order-item">
+                <span>${item.name}</span>
+                <span>${item.price} บาท</span>
+            </div>
+        `).join('')}
+        <p>หมายเหตุ: ${order.note || '-'}</p>
+    `;
+    
+    historyList.insertBefore(historyItem, historyList.firstChild);
+}
+
+// สร้างเลขคิวที่ไม่ซ้ำกัน
+function generateUniqueQueueNumber() {
+    return Math.floor(Math.random() * 1000) + 1;
+}
+
+// บันทึกออเดอร์
+function saveOrder(order) {
+    let orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    orders.push(order);
+    localStorage.setItem('orders', JSON.stringify(orders));
+}
+    </script>
+    <!-- เพิ่ม SweetAlert2 library ในส่วน head -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
