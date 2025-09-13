@@ -1,30 +1,35 @@
-# ขั้นตอนการตั้งค่า Git และ Push โค้ด
+# ขั้นตอนการตั้งค่า Git และเชื่อมต่อกับ GitHub
 
-1. ตั้งค่า Git Credentials:
-git config --global user.name "YOUR_GITHUB_USERNAME"
-git config --global user.email "YOUR_GITHUB_EMAIL"
+1. สร้าง SSH Key (ทำแล้ว):
+   ssh-keygen -t ed25519 -C "st37499@skb.ac.th"
 
-2. สร้าง Personal Access Token:
-- ไปที่ GitHub.com -> Settings -> Developer settings -> Personal access tokens
-- เลือก "Tokens (classic)"
-- Generate new token (classic)
-- ตั้งชื่อ token และเลือกสิทธิ์ 'repo'
-- คัดลอก token เก็บไว้
+2. คัดลอก Public Key:
+   # Windows:
+   type %userprofile%\.ssh\id_ed25519.pub
+   # หรือ
+   cat ~/.ssh/id_ed25519.pub
 
-3. ตั้งค่า Remote Repository ใหม่:
-git remote remove origin
-git remote add origin https://YOUR_USERNAME:YOUR_TOKEN@github.com/XXPAK-06/ORDER_IT-KMITL.git
+3. เพิ่ม SSH Key ใน GitHub:
+   - ไปที่ GitHub.com -> Settings -> SSH and GPG keys
+   - กด "New SSH key"
+   - ตั้งชื่อ Title (เช่น "My Computer")
+   - วาง Public Key ที่คัดลอกไว้ในช่อง Key
+   - กด "Add SSH key"
 
-4. Push Code:
-git branch -M main
-git push -u origin main
+4. ทดสอบการเชื่อมต่อ:
+   ssh -T git@github.com
+   # ถ้าขึ้น "Hi username! You've successfully authenticated" แสดงว่าสำเร็จ
 
-# หากใช้ GitHub CLI แทน:
-1. ติดตั้ง GitHub CLI:
-winget install GitHub.cli
+5. ตั้งค่า Git Repository:
+   cd "c:\Users\User\OneDrive\Desktop\queue - Copy"
+   git init
+   git add .
+   git commit -m "Initial commit"
+   
+6. เชื่อมต่อและ Push:
+   git remote add origin git@github.com:XXPAK-06/ORDER_IT-KMITL.git
+   git push -u origin main
 
-2. Login:
-gh auth login
-
-3. Push:
-git push -u origin main
+หมายเหตุ:
+- หากมี error "Permission denied" ให้ตรวจสอบว่าเพิ่ม SSH key ใน GitHub แล้ว
+- ถ้า push ไม่ได้ ให้ลองใช้คำสั่ง: git push -u origin main --force
