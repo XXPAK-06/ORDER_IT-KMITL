@@ -597,6 +597,50 @@
                 display: none;
             }
         }
+
+        .queue-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .queue-info {
+            display: grid;
+            gap: 8px;
+        }
+
+        .queue-count {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .wait-time {
+            color: #666;
+        }
+
+        .queue-status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .queue-status.available {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .queue-status.full {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-order:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
     </style>
     <script src="userStorage.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -738,6 +782,9 @@ const restaurants = [
         id: 1,
         name: "ร้านโคเจ",
         type: "อาหารเกาหลี",
+        currentQueue: 0,
+        maxQueue: 15,
+        estimatedTime: 10, // นาทีต่อออเดอร์
         menu: [
             { name: "บิบิมบับ", price: 89 },
             { name: "คิมบับ", price: 79 },
@@ -748,6 +795,9 @@ const restaurants = [
         id: 2,
         name: "ครัวไทยอีสาน",
         type: "อาหารไทย-อีสาน",
+        currentQueue: 0,
+        maxQueue: 15,
+        estimatedTime: 10,
         menu: [
             { name: "ส้มตำไทย", price: 60 },
             { name: "ลาบหมู", price: 70 },
@@ -758,6 +808,9 @@ const restaurants = [
         id: 3,
         name: "Pasta House",
         type: "อาหารอิตาเลียน",
+        currentQueue: 0,
+        maxQueue: 15,
+        estimatedTime: 10,
         menu: [
             { name: "สปาเกตตี้คาโบนาร่า", price: 129 },
             { name: "พิซซ่าหน้าซีฟู้ด", price: 199 },
@@ -768,6 +821,9 @@ const restaurants = [
         id: 4,
         name: "Sushi Bar",
         type: "อาหารญี่ปุ่น",
+        currentQueue: 0,
+        maxQueue: 15,
+        estimatedTime: 10,
         menu: [
             { name: "ข้าวหน้าปลาดิบ", price: 159 },
             { name: "ราเมนหมูชาชู", price: 129 },
@@ -778,6 +834,9 @@ const restaurants = [
         id: 5,
         name: "จานเด็ด",
         type: "อาหารตามสั่ง",
+        currentQueue: 0,
+        maxQueue: 15,
+        estimatedTime: 10,
         menu: [
             { name: "ข้าวกะเพราหมูสับไข่ดาว", price: 55 },
             { name: "ผัดซีอิ๊วหมู", price: 50 },
@@ -788,6 +847,9 @@ const restaurants = [
         id: 6,
         name: "Sichuan Kitchen",
         type: "อาหารจีน",
+        currentQueue: 0,
+        maxQueue: 15,
+        estimatedTime: 10,
         menu: [
             { name: "หมาล่าชาบู", price: 199 },
             { name: "ข้าวหน้าเป็ดย่าง", price: 89 },
@@ -798,6 +860,9 @@ const restaurants = [
         id: 7,
         name: "Halal Food",
         type: "อาหารมุสลิม",
+        currentQueue: 0,
+        maxQueue: 15,
+        estimatedTime: 10,
         menu: [
             { name: "ข้าวหมกไก่", price: 69 },
             { name: "ข้าวมันส้มตำ", price: 65 },
@@ -808,6 +873,9 @@ const restaurants = [
         id: 8,
         name: "Veggie Fresh",
         type: "อาหารมังสวิรัติ",
+        currentQueue: 0,
+        maxQueue: 15,
+        estimatedTime: 10,
         menu: [
             { name: "ผัดผักรวมมิตร", price: 60 },
             { name: "เห็ดทอดกระเทียม", price: 65 },
@@ -818,6 +886,9 @@ const restaurants = [
         id: 9,
         name: "Mekong River",
         type: "อาหารเวียดนาม",
+        currentQueue: 0,
+        maxQueue: 15,
+        estimatedTime: 10,
         menu: [
             { name: "เฝอเนื้อตุ๋น", price: 89 },
             { name: "ปอเปี๊ยะสด", price: 69 },
@@ -828,6 +899,9 @@ const restaurants = [
         id: 10,
         name: "Indian Curry",
         type: "อาหารอินเดีย",
+        currentQueue: 0,
+        maxQueue: 15,
+        estimatedTime: 10,
         menu: [
             { name: "ข้าวหมกไก่มาซาล่า", price: 99 },
             { name: "แกงกะหรี่ไก่", price: 89 },
@@ -878,7 +952,7 @@ function getStatusText(status) {
     }
 }
 
-// Fix confirmOrder function
+// แก้ไขฟังก์ชัน confirmOrder
 function confirmOrder() {
     // ตรวจสอบการกรอกข้อมูล
     const customerName = document.getElementById('customerName').value.trim();
@@ -917,6 +991,26 @@ function confirmOrder() {
         });
         return;
     }
+
+    const restaurant = restaurants.find(r => r.id === currentOrder.restaurantId);
+    
+    // ตรวจสอบคิวก่อนยืนยันการสั่ง
+    if (restaurant.currentQueue >= restaurant.maxQueue) {
+        Swal.fire({
+            title: 'ไม่สามารถสั่งได้',
+            text: 'ขออภัย คิวของร้านเต็มแล้ว กรุณาลองใหม่ภายหลัง',
+            icon: 'warning',
+            confirmButtonColor: '#ff6b00'
+        });
+        return;
+    }
+
+    // เพิ่มคิวของร้านเมื่อสั่งอาหาร
+    restaurant.currentQueue++;
+    updateRestaurantDisplay(currentOrder.restaurantId);
+
+    // บันทึกข้อมูลร้านค้าลง localStorage
+    localStorage.setItem('restaurants', JSON.stringify(restaurants));
 
     // ถ้าผ่านการตรวจสอบทั้งหมด ดำเนินการสั่งอาหาร
     const queueNumber = generateUniqueQueueNumber();
@@ -968,6 +1062,40 @@ function confirmOrder() {
     document.getElementById('specialRequest').value = '';
 }
 
+// ฟังก์ชันจัดการคิว
+function updateQueueStatus(restaurantId) {
+    const restaurant = restaurants.find(r => r.id === restaurantId);
+    if (!restaurant) return;
+    
+    // อัพเดตจำนวนคิว
+    restaurant.currentQueue++;
+    
+    // บันทึกข้อมูลคิวลง localStorage
+    localStorage.setItem('restaurants', JSON.stringify(restaurants));
+    
+    // อัพเดตการแสดงผลคิว
+    updateRestaurantDisplay(restaurantId);
+}
+
+function updateRestaurantDisplay(restaurantId) {
+    const restaurant = restaurants.find(r => r.id === restaurantId);
+    if (!restaurant) return;
+
+    const queueDisplay = document.querySelector(`#queue-${restaurantId}`);
+    if (queueDisplay) {
+        const waitTime = restaurant.currentQueue * restaurant.estimatedTime;
+        queueDisplay.innerHTML = `
+            <div class="queue-info">
+                <div class="queue-count">จำนวนคิว: ${restaurant.currentQueue}/${restaurant.maxQueue}</div>
+                <div class="wait-time">เวลารอโดยประมาณ: ${waitTime} นาที</div>
+                <div class="queue-status ${restaurant.currentQueue >= restaurant.maxQueue ? 'full' : 'available'}">
+                    ${restaurant.currentQueue >= restaurant.maxQueue ? 'คิวเต็ม' : 'รับออเดอร์'}
+                </div>
+            </div>
+        `;
+    }
+}
+
 function renderTables() {
     const tablesGrid = document.getElementById('tablesGrid');
     if (!tablesGrid) return;
@@ -983,14 +1111,16 @@ function renderTables() {
                 <div class="table-name">${restaurant.name}</div>
                 <div class="table-type">${restaurant.type}</div>
             </div>
+            <div id="queue-${restaurant.id}" class="queue-container"></div>
             <div class="menu-items">
                 ${restaurant.menu.map(item => `
                     <div class="menu-item">
                         <span class="menu-item-name">${item.name}</span>
                         <span class="menu-item-price">${item.price} บาท</span>
                         <button onclick="addToOrder(${restaurant.id}, '${item.name}', ${item.price})" 
-                                class="btn-order">
-                            สั่งอาหาร
+                                class="btn-order"
+                                ${restaurant.currentQueue >= restaurant.maxQueue ? 'disabled' : ''}>
+                            ${restaurant.currentQueue >= restaurant.maxQueue ? 'คิวเต็ม' : 'สั่งอาหาร'}
                         </button>
                     </div>
                 `).join('')}
@@ -998,11 +1128,24 @@ function renderTables() {
         `;
         
         tablesGrid.appendChild(tableCard);
+        updateRestaurantDisplay(restaurant.id);
     });
 }
 
 // เพิ่ม event listener สำหรับการโหลดหน้า
 document.addEventListener('DOMContentLoaded', function() {
+    // โหลดข้อมูลร้านค้าจาก localStorage
+    const savedRestaurants = localStorage.getItem('restaurants');
+    if (savedRestaurants) {
+        const savedData = JSON.parse(savedRestaurants);
+        // อัพเดตเฉพาะข้อมูลคิว
+        restaurants.forEach(restaurant => {
+            const savedRestaurant = savedData.find(r => r.id === restaurant.id);
+            if (savedRestaurant) {
+                restaurant.currentQueue = savedRestaurant.currentQueue;
+            }
+        });
+    }
     renderTables();
 });
 
@@ -1048,6 +1191,30 @@ document.head.appendChild(additionalStyle);
 
 // เพิ่มฟังก์ชันสำหรับเพิ่มรายการอาหาร
 function addToOrder(restaurantId, itemName, price) {
+    const restaurant = restaurants.find(r => r.id === restaurantId);
+    
+    // ตรวจสอบว่าเป็นร้านเดียวกันหรือไม่
+    if (currentOrder.items.length > 0 && currentOrder.restaurantId !== restaurantId) {
+        Swal.fire({
+            title: 'ไม่สามารถสั่งได้',
+            text: 'กรุณาสั่งอาหารจากร้านเดียวกันในแต่ละออเดอร์',
+            icon: 'warning',
+            confirmButtonColor: '#ff6b00'
+        });
+        return;
+    }
+    
+    // ตรวจสอบคิว
+    if (restaurant.currentQueue >= restaurant.maxQueue) {
+        Swal.fire({
+            title: 'ไม่สามารถสั่งได้',
+            text: 'ขออภัย คิวของร้านเต็มแล้ว กรุณาลองใหม่ภายหลัง',
+            icon: 'warning',
+            confirmButtonColor: '#ff6b00'
+        });
+        return;
+    }
+
     // แสดงรายการที่สั่ง
     document.getElementById('currentOrderList').style.display = 'block';
     
@@ -1099,6 +1266,8 @@ function removeItem(index) {
 // แสดงบัตรคิว
 function showQueueCard(order) {
     const restaurant = restaurants.find(r => r.id === order.restaurantId);
+    const waitTime = restaurant.estimatedTime * restaurant.currentQueue;
+    
     const popup = document.createElement('div');
     popup.className = 'queue-popup';
     popup.innerHTML = `
@@ -1108,6 +1277,7 @@ function showQueueCard(order) {
                 <h2>บัตรคิวของคุณ</h2>
                 <h3 class="restaurant-name">${restaurant.name}</h3>
                 <div class="queue-number">คิวที่: ${order.queueNumber}</div>
+                <div class="estimated-time">เวลารอโดยประมาณ: ${waitTime} นาที</div>
             </div>
             <div class="queue-detail">
                 <p>ชื่อ: ${order.customerName}</p>
